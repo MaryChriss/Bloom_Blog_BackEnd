@@ -1,5 +1,6 @@
 package br.com.fiap.Bloom.model;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Post {
@@ -31,4 +32,16 @@ public class Post {
     public byte[] getImagem() {
         return imagem;
     }
+
+    public void setId_post(Long id_post) {
+        this.id_post = id_post;
+    }
+
+    @Override
+    public String toString() {
+        return "Post [id_post=" + id_post + ", titulo=" + titulo + ", conteudo=" + conteudo + ", imagem="
+                + Arrays.toString(imagem) + "]";
+    }
+
+    
 }
