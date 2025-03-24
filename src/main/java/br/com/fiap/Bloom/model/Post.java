@@ -10,11 +10,8 @@ public class Post {
     private String conteudo;
     private byte[] imagem;
 
-    public Post(Long id_post, String titulo, String conteudo, byte[] imagem) {
+    public Post() {
         this.id_post = Math.abs(new Random().nextLong());
-        this.titulo = titulo;
-        this.conteudo = conteudo;
-        this.imagem = imagem;
     }
 
     public Long getId_post() {
@@ -37,11 +34,21 @@ public class Post {
         this.id_post = id_post;
     }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
+
+    public void setImagem(byte[] imagem) {
+        this.imagem = imagem;
+    }
+
     @Override
     public String toString() {
         return "Post [id_post=" + id_post + ", titulo=" + titulo + ", conteudo=" + conteudo + ", imagem="
                 + Arrays.toString(imagem) + "]";
     }
-
-    
 }
