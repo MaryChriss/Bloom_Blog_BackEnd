@@ -3,16 +3,18 @@ package br.com.fiap.Bloom.model;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Post {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Post {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_post;
     private String titulo;
     private String conteudo;
     private byte[] imagem;
-
-    public Post() {
-        this.id_post = Math.abs(new Random().nextLong());
-    }
 
     public Long getId_post() {
         return id_post;

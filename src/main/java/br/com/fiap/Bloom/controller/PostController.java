@@ -1,15 +1,10 @@
 package br.com.fiap.Bloom.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,52 +14,33 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.fiap.Bloom.model.Post;
+import br.com.fiap.Bloom.repository.PostRepository;
 
-@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/posts")
 public class PostController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
-    private List<Post> repository = new ArrayList<>();
     
-    private final AtomicLong idGenerator = new AtomicLong(1);
-
+    @Autowired
+    private PostRepository repository;
+    
     // Listar 
     @GetMapping
     public List<Post> index() {
-        return repository;
+        return repository.findAll();
     }
 
     // Cadastrar 
     @PostMapping
-    public ResponseEntity<Post> create(
-            @RequestParam("titulo") String titulo,
-            @RequestParam("conteudo") String conteudo,
-            @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
-
-        log.info("Post postado: " + titulo);
-
-        Post post = new Post();
-        post.setId_post(idGenerator.getAndIncrement());
-        post.setTitulo(titulo);
-        post.setConteudo(conteudo);
-
-        if (imagem != null && !imagem.isEmpty()) {
-            try {
-                post.setImagem(imagem.getBytes());
-                log.info("Imagem recebida: " + imagem.getOriginalFilename());
-            } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a imagem", e);
-            }
-        }
-
-        repository.add(post);
-        return ResponseEntity.status(201).body(post);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post create(@RequestBody Post post) {
+        log.info("Post postado: " + post.getTitulo());
+        repository.save(post);
+        return post;
     }
 
     // Buscar um post por ID
@@ -79,44 +55,23 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         log.info("Deletando post " + id);
-        repository.remove(getPost(id));
+        repository.delete(getPost(id));
     }
 
     //Atualizar 
     @PutMapping("/{id}")
-    public Post update(
-            @PathVariable Long id,
-            @RequestParam("titulo") String titulo,
-            @RequestParam("conteudo") String conteudo,
-            @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
-
-        log.info("Atualizando post " + id + " - Novo título: " + titulo);
-
-        Post post = getPost(id);
-        repository.remove(post);
-
-        post.setTitulo(titulo);
-        post.setConteudo(conteudo);
-
-        if (imagem != null && !imagem.isEmpty()) {
-            try {
-                post.setImagem(imagem.getBytes());
-                log.info("Imagem atualizada: " + imagem.getOriginalFilename());
-            } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a imagem", e);
-            }
-        }
-
-        repository.add(post);
-
-        return post;
+    public Post update(@PathVariable Long id, @RequestBody Post post) {
+        log.info("Atualizando post " + id + "" + post);
+    
+        getPost(id);
+        post.setId_post(id);
+        return repository.save(post);
     }
-
+    
     // buscar post por ID
     private Post getPost(Long id) {
-        return repository.stream()
-                .filter(p -> p.getId_post().equals(id))
-                .findFirst()
+        return repository
+                .findById(id)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + id + " não encontrado")
                 );
