@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,23 +20,22 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.fiap.Bloom.model.Login;
 import br.com.fiap.Bloom.repository.LoginRepository;
 
-@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/posts/login")
 public class LoginController {
-    
+
     private Logger log = LoggerFactory.getLogger(getClass());
-    
+
     @Autowired
     private LoginRepository repository;
-    
-    // Listar 
+
+    // Listar
     @GetMapping
     public List<Login> index() {
         return repository.findAll();
     }
 
-    // Cadastrar 
+    // Cadastrar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Login create(@RequestBody Login login) {
@@ -61,22 +59,21 @@ public class LoginController {
         repository.delete(getLogin(id));
     }
 
-    //Atualizar 
+    // Atualizar
     @PutMapping("/{id}")
     public Login update(@PathVariable Long id, @RequestBody Login login) {
         log.info("Atualizando login " + id + "" + login);
-    
+
         getLogin(id);
         login.setId_login(id);
         return repository.save(login);
     }
-    
+
     // buscar post por ID
     private Login getLogin(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Login " + id + " não encontrado")
-                );
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Login " + id + " não encontrado"));
     }
 }

@@ -7,30 +7,31 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Login {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_login;
     private String email_login;
     private String senha_login;
-    private Long idTeste;
-    private Teste teste;
+    // private Long idClient;
+    // private Client client;
 
     public Login() {
     }
 
-    public Login(Teste teste, String emailLogin, Long idLogin, String senhaLogin) {
-        this.teste = teste;
+    public Login(Client client, String emailLogin, Long idLogin, String senhaLogin) {
+        // this.client = client;
         this.email_login = emailLogin;
         this.id_login = idLogin;
         this.senha_login = senhaLogin;
     }
 
-    public Teste getTeste() {
-        return teste;
-    }
+    // public Client getClient() {
+    // return client;
+    // }
 
-    public void setTeste(Teste teste) {
-        this.teste = teste;
-    }
+    // public void setClient(Client client) {
+    // this.client = client;
+    // }
 
     public String getEmail_login() {
         return email_login;
@@ -40,13 +41,13 @@ public class Login {
         this.email_login = email_login;
     }
 
-    public Long getIdTeste() {
-        return idTeste;
-    }
+    // public Long getIdClient() {
+    // return idClient;
+    // }
 
-    public void setId_teste(Long id_teste) {
-        this.idTeste = id_teste;
-    }
+    // public void setId_Client(Long idClient) {
+    // this.idClient = idClient;
+    // }
 
     public Long getId_login() {
         return id_login;
