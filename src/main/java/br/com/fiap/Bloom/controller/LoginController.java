@@ -42,8 +42,7 @@ public class LoginController {
     @ResponseStatus(HttpStatus.CREATED)
     public Login create(@RequestBody Login login) {
         log.info("Login adicionado email: " + login.getEmail_login());
-        repository.save(login);
-        return login;
+        return repository.save(login);
     }
 
     // Buscar um post por ID
@@ -69,6 +68,17 @@ public class LoginController {
         getLogin(id);
         login.setId_login(id);
         return repository.save(login);
+    }
+
+    @PostMapping("/auth")
+    public Login autenticar(@RequestBody Login login) {
+        log.info("Autenticando login para o e-mail: " + login.getEmail_login());
+    
+        return repository.findAll().stream()
+            .filter(l -> l.getEmail_login().equals(login.getEmail_login())
+                      && l.getSenha_login().equals(login.getSenha_login()))
+            .findFirst()
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
     }
     
     // buscar post por ID

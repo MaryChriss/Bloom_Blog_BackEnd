@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,65 +17,64 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.fiap.Bloom.model.Teste;
-import br.com.fiap.Bloom.repository.ClientRepository;
+import br.com.fiap.Bloom.model.User;
+import br.com.fiap.Bloom.repository.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:3002")
 @RestController
-@RequestMapping("/posts/client")
-public class ClientController {
+@RequestMapping("/posts/user")
+public class UserController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
     
     @Autowired
-    private ClientRepository repository;
+    private UserRepository repository;
     
     // Listar 
     @GetMapping
-    public List<Teste> index() {
+    public List<User> index() {
         return repository.findAll();
     }
 
     // Cadastrar 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Teste create(@RequestBody Teste teste) {
-        log.info("Cliente adicionado: " + teste.getNomeTeste());
-        repository.save(teste);
-        return teste;
+    public User create(@RequestBody User user) {
+        log.info("Usuario adicionado: " + user.getNomeUser());
+        repository.save(user);
+        return user;
     }
 
     // Buscar um post por ID
     @GetMapping("/{id}")
-    public Teste get(@PathVariable Long id) {
-        log.info("Buscando cliente " + id);
-        return getTeste(id);
+    public User get(@PathVariable Long id) {
+        log.info("Buscando usuario " + id);
+        return getUser(id);
     }
 
     // Deletar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        log.info("Deletando cliente " + id);
-        repository.delete(getTeste(id));
+        log.info("Deletando usuario " + id);
+        repository.delete(getUser(id));
     }
 
     //Atualizar 
     @PutMapping("/{id}")
-    public Teste update(@PathVariable Long id, @RequestBody Teste teste) {
-        log.info("Atualizando cliente " + id + "" + teste);
+    public User update(@PathVariable Long id, @RequestBody User user) {
+        log.info("Atualizando usuario " + id + "" + user);
     
-        getTeste(id);
-        teste.setIdTeste(id);
-        return repository.save(teste);
+        getUser(id);
+        user.setIdUser(id);
+        return repository.save(user);
     }
     
     // buscar post por ID
-    private Teste getTeste(Long id) {
+    private User getUser(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente " + id + " não encontrado")
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario " + id + " não encontrado")
                 );
     }
 }

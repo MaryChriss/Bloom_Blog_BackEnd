@@ -1,7 +1,6 @@
 package br.com.fiap.Bloom.model;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

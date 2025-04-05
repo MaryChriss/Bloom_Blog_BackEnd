@@ -4,32 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Login {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_login;
+    @NotBlank(message = "Email não pode ser vazio")
     private String email_login;
+   @NotBlank(message = "Senha não pode ser vazio")
     private String senha_login;
-    private Long idTeste;
-    private Teste teste;
 
     public Login() {
     }
 
-    public Login(Teste teste, String emailLogin, Long idLogin, String senhaLogin) {
-        this.teste = teste;
+    public Login( String emailLogin, Long idLogin, String senhaLogin) {
         this.email_login = emailLogin;
         this.id_login = idLogin;
         this.senha_login = senhaLogin;
-    }
-
-    public Teste getTeste() {
-        return teste;
-    }
-
-    public void setTeste(Teste teste) {
-        this.teste = teste;
     }
 
     public String getEmail_login() {
@@ -38,14 +30,6 @@ public class Login {
 
     public void setEmail_login(String email_login) {
         this.email_login = email_login;
-    }
-
-    public Long getIdTeste() {
-        return idTeste;
-    }
-
-    public void setId_teste(Long id_teste) {
-        this.idTeste = id_teste;
     }
 
     public Long getId_login() {
