@@ -25,7 +25,7 @@ import br.com.fiap.Bloom.repository.UserRepository;
 public class UserController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
-    
+
     @Autowired
     private UserRepository repository;
     
@@ -35,7 +35,6 @@ public class UserController {
         return repository.findAll();
     }
 
-    // Cadastrar 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user) {
@@ -44,14 +43,12 @@ public class UserController {
         return user;
     }
 
-    // Buscar um post por ID
     @GetMapping("/{id}")
     public User get(@PathVariable Long id) {
         log.info("Buscando usuario " + id);
         return getUser(id);
     }
 
-    // Deletar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -59,7 +56,6 @@ public class UserController {
         repository.delete(getUser(id));
     }
 
-    //Atualizar 
     @PutMapping("/{id}")
     public User update(@PathVariable Long id, @RequestBody User user) {
         log.info("Atualizando usuario " + id + "" + user);

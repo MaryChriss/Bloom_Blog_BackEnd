@@ -8,12 +8,15 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Login {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_login;
     @NotBlank(message = "Email não pode ser vazio")
     private String email_login;
    @NotBlank(message = "Senha não pode ser vazio")
     private String senha_login;
+    // private Long idClient;
+    // private Client client;
 
     public Login() {
     }
@@ -24,6 +27,14 @@ public class Login {
         this.senha_login = senhaLogin;
     }
 
+    // public Client getClient() {
+    // return client;
+    // }
+
+    // public void setClient(Client client) {
+    // this.client = client;
+    // }
+
     public String getEmail_login() {
         return email_login;
     }
@@ -31,6 +42,14 @@ public class Login {
     public void setEmail_login(String email_login) {
         this.email_login = email_login;
     }
+
+    // public Long getIdClient() {
+    // return idClient;
+    // }
+
+    // public void setId_Client(Long idClient) {
+    // this.idClient = idClient;
+    // }
 
     public Long getId_login() {
         return id_login;
