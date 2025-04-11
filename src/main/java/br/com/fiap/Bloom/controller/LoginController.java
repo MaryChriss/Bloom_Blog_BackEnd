@@ -2,8 +2,6 @@ package br.com.fiap.Bloom.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,23 +17,27 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.Bloom.model.Login;
 import br.com.fiap.Bloom.repository.LoginRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/posts/login")
-public class LoginController {
+@Slf4j
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+public class LoginController {
 
     @Autowired
     private LoginRepository repository;
 
     // Listar
     @GetMapping
+    @Operation(summary = "Listar todos os logins", description = "Lista todos os logins salvos do sistema", tags = "Login")
     public List<Login> index() {
         return repository.findAll();
     }
 
     // Cadastrar
+    @Operation(summary = "Realizando o cadastro no sistema", description = "Cadastro de usuarios", tags = "Login")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Login create(@RequestBody Login login) {
@@ -44,6 +46,7 @@ public class LoginController {
     }
 
     // Buscar um post por ID
+    @Operation(summary = "Buscando um login especifico por ID", description = "BUscar login por ID", tags = "Login")
     @GetMapping("/{id}")
     public Login get(@PathVariable Long id) {
         log.info("Buscando login " + id);
@@ -52,6 +55,7 @@ public class LoginController {
 
     // Deletar
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar o login do sistema", description = "Deleta o login pelo ID", tags = "Login")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         log.info("Deletando login " + id);
@@ -60,6 +64,7 @@ public class LoginController {
 
     // Atualizar
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizando login", description = "Atualiza as informações do login como email e senha", tags = "Login")
     public Login update(@PathVariable Long id, @RequestBody Login login) {
         log.info("Atualizando login " + id + "" + login);
 
@@ -69,6 +74,7 @@ public class LoginController {
     }
 
     @PostMapping("/auth")
+    @Operation(summary = "Realizando a autenticação ", description = "Autentifica se o login esta no sistema ", tags = "Login")
     public Login autenticar(@RequestBody Login login) {
         log.info("Autenticando login para o e-mail: " + login.getEmail_login());
     

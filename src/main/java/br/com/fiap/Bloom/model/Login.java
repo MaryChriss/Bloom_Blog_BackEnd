@@ -4,66 +4,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Login {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_login;
+
     @NotBlank(message = "Email não pode ser vazio")
     private String email_login;
+
    @NotBlank(message = "Senha não pode ser vazio")
+   @Size(min = 6, message = "deve ter pelo menos 6 caracteres")
     private String senha_login;
-    // private Long idClient;
-    // private Client client;
 
-    public Login() {
-    }
-
-    public Login( String emailLogin, Long idLogin, String senhaLogin) {
-        this.email_login = emailLogin;
-        this.id_login = idLogin;
-        this.senha_login = senhaLogin;
-    }
-
-    // public Client getClient() {
-    // return client;
-    // }
-
-    // public void setClient(Client client) {
-    // this.client = client;
-    // }
-
-    public String getEmail_login() {
-        return email_login;
-    }
-
-    public void setEmail_login(String email_login) {
-        this.email_login = email_login;
-    }
-
-    // public Long getIdClient() {
-    // return idClient;
-    // }
-
-    // public void setId_Client(Long idClient) {
-    // this.idClient = idClient;
-    // }
-
-    public Long getId_login() {
-        return id_login;
-    }
-
-    public void setId_login(Long id_login) {
-        this.id_login = id_login;
-    }
-
-    public String getSenha_login() {
-        return senha_login;
-    }
-
-    public void setSenha_login(String senha_login) {
-        this.senha_login = senha_login;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

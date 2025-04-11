@@ -3,8 +3,6 @@ package br.com.fiap.Bloom.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,25 +20,29 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.Bloom.model.Post;
 import br.com.fiap.Bloom.repository.PostRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
 //@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/posts")
-public class PostController {
+@Slf4j
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+public class PostController {
 
     @Autowired
     private PostRepository repository;
 
     // Listar
     @GetMapping
+    @Operation(summary = "Listar todos os posts", description = "Lista todas os posts salvas para um determinado usuário", tags = "Posts")
     public List<Post> index() {
         return repository.findAll();
     }
 
     // Cadastrar
     @PostMapping(consumes = "multipart/form-data")
+    @Operation(summary = "Adicionar posts no sistema", description = "Cadastro de posts podendo ter imagens ou não", tags = "Posts")
     @ResponseStatus(HttpStatus.CREATED)
     public Post create(
             @RequestParam("titulo") String titulo,
@@ -60,6 +62,7 @@ public class PostController {
 
     // Buscar um post por ID
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar post por ID", description = "Buscar um post em especifico", tags = "Posts")
     public Post get(@PathVariable Long id) {
         log.info("Buscando post " + id);
         return getPost(id);
@@ -68,6 +71,7 @@ public class PostController {
     // Deletar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Deletando post do sistema", description = "Deletando posts", tags = "Posts")
     public void delete(@PathVariable Long id) {
         log.info("Deletando post " + id);
         repository.delete(getPost(id));
@@ -75,6 +79,7 @@ public class PostController {
 
     // Atualizar
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    @Operation(summary = "Atualizando posts", description = "Atualiza o titulo, conteuno, imagem etc", tags = "Posts")
     public Post update(
             @PathVariable Long id,
             @RequestParam("titulo") String titulo,
