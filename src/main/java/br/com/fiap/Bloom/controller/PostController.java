@@ -42,7 +42,7 @@ public class PostController {
     @Operation(summary = "Listar todos os posts", description = "Lista todos os posts com filtros opcionais por título e autor, com paginação", tags = "Posts")
     public Page<Post> index(
             PostFilter filter,
-            @PageableDefault(size = 6, sort = "date", direction = Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 8, sort = "date", direction = Direction.DESC) Pageable pageable) {
         return repository.findAll(PostSpecification.withFilters(filter), pageable);
     }
 
