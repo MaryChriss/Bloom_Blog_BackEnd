@@ -1,9 +1,11 @@
 package br.com.fiap.Bloom.controller;
 
 import java.io.IOException;
-import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import br.com.fiap.Bloom.model.Post;
+import br.com.fiap.Bloom.model.PostFilter;
 import br.com.fiap.Bloom.repository.PostRepository;
+import br.com.fiap.Bloom.specification.PostSpecification;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort.Direction;
 
 //@CrossOrigin(origins = "http://localhost:3002")
 @RestController
@@ -35,9 +39,11 @@ public class PostController {
 
     // Listar
     @GetMapping
-    @Operation(summary = "Listar todos os posts", description = "Lista todas os posts salvas para um determinado usuário", tags = "Posts")
-    public List<Post> index() {
-        return repository.findAll();
+    @Operation(summary = "Listar todos os posts", description = "Lista todos os posts com filtros opcionais por título e autor, com paginação", tags = "Posts")
+    public Page<Post> index(
+            PostFilter filter,
+            @PageableDefault(size = 6, sort = "date", direction = Direction.DESC) Pageable pageable) {
+        return repository.findAll(PostSpecification.withFilters(filter), pageable);
     }
 
     // Cadastrar
